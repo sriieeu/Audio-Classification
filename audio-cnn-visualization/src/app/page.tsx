@@ -142,7 +142,13 @@ export default function HomePage() {
           ),
         );
 
-        const response = await fetch("inference_url_here", {
+        // Resolve inference endpoint from env var or fallback to '/api/inference'.
+        // Set `NEXT_PUBLIC_INFERENCE_URL` in your `.env` to point to the running
+        // model server (e.g. the Modal function URL). If you don't have one,
+        // implement a proxy API route at '/api/inference'.
+        const inferenceUrl = process.env.NEXT_PUBLIC_INFERENCE_URL || "/api/inference";
+
+        const response = await fetch(inferenceUrl, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ audio_data: base64String }),
